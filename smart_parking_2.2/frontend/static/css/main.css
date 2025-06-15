@@ -1,0 +1,496 @@
+:root {
+    --primary-color: #00a8ff;
+    --secondary-color: #0097e6;
+    --text-color: #dcdde1;
+    --border-color: #40739e;
+    --error-color: #e84118;
+    --success-color: #4cd137;
+    --background-color: #192a56;
+    --card-bg: rgba(41, 52, 92, 0.95);
+    --glow-color: #00a8ff;
+    --dark-bg: #0c1631;
+    --light-text: #f5f6fa;
+    --panel-bg: rgba(25, 42, 86, 0.8);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--background-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        var(--primary-color) 0%, 
+        transparent 20%,
+        var(--secondary-color) 40%,
+        transparent 60%,
+        var(--primary-color) 80%);
+    opacity: 0.1;
+    animation: gradient 15s linear infinite;
+    z-index: -1;
+}
+
+@keyframes gradient {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 登录和注册样式保持不变 */
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    position: relative;
+}
+
+.auth-box {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent, 
+        rgba(0, 168, 255, 0.1), 
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: glowingEffect 3s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes glowingEffect {
+    0% { transform: rotate(45deg) translateX(-100%); }
+    100% { transform: rotate(45deg) translateX(100%); }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--light-text);
+}
+
+.auth-header h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--light-text);
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--glow-color);
+    box-shadow: 0 0 15px rgba(0, 168, 255, 0.3);
+    outline: none;
+}
+
+.input-group label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-color);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: 0;
+    left: 10px;
+    font-size: 12px;
+    padding: 0 5px;
+    background: var(--card-bg);
+    border-radius: 4px;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: var(--light-text);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 168, 255, 0.4);
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-color);
+}
+
+.auth-switch a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-switch a:hover {
+    color: var(--secondary-color);
+}
+
+/* 主界面样式 */
+.main-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark-bg);
+    color: var(--light-text);
+    display: flex;
+    flex-direction: column;
+}
+
+.main-nav {
+    background: var(--card-bg);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    height: 60px;
+}
+
+.nav-button {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, var(--error-color), #c23616);
+    color: var(--light-text);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(232, 65, 24, 0.4);
+}
+
+/* 内容容器 */
+.content-container {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 60px);
+}
+
+/* 视频面板 */
+.video-panel {
+    flex: 3;
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-title {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.video-container {
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    position: relative;
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#videoStream {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* 确保视频流在底层 */
+    object-fit: contain;
+}
+
+#drawingCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* 确保画布在视频流上层 */
+    background: transparent; /* 确保画布背景透明 */
+}
+
+/* 信息面板 */
+.info-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-left: 1px solid var(--border-color);
+}
+
+/* 时间日期面板 */
+.time-date-panel {
+    flex: 1;
+    background: var(--panel-bg);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.time-date-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-time {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.current-date {
+    font-size: 1.5em;
+}
+
+/* 车位信息面板 */
+.parking-info-panel {
+    flex: 2;
+    background: var(--panel-bg);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.parking-info-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+/* 车位统计项 */
+.parking-stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    background: rgba(25, 42, 86, 0.6);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.stat-label {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--light-text);
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--light-text);
+}
+
+.stat-value.occupied {
+    color: #e74c3c;
+}
+
+.stat-value.available {
+    color: #2ecc71;
+}
+
+/* 车位操作按钮 */
+.parking-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    color: var(--light-text);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-btn {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+}
+
+.clear-btn {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+}
+
+.clear-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+/* 摄像头控制 */
+.camera-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.camera-controls button {
+    margin: 5px;
+    padding: 8px 15px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+}
+
+.camera-controls button:hover {
+    background: var(--secondary-color);
+}
+
+/* 通知和加载样式 */
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100vh);
+    padding: 15px 25px;
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--light-text);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification.show {
+    transform: translate(-50%, -50%) translateY(0);
+}
+
+.notification.success {
+    border-left: 4px solid var(--success-color);
+}
+
+.notification.error {
+    border-left: 4px solid var(--error-color);
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25, 42, 86, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.show {
+    opacity: 1;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid transparent;
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,14 @@
+2025-06-15 18:12:54,776 - root - INFO - 正在使用 1400 后端初始化摄像头...
+2025-06-15 18:12:56,138 - root - INFO - 摄像头 0 检测成功
+2025-06-15 18:12:57,953 - root - INFO - 可用摄像头列表: [0]
+2025-06-15 18:12:57,953 - root - INFO - 模型文件路径: E:\bc\python\smart_parking_2.2\models\yolov8n.pt
+2025-06-15 18:12:57,953 - root - INFO - 使用计算设备: cpu
+2025-06-15 18:13:00,500 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google-analytics.com:443
+2025-06-15 18:13:00,593 - root - INFO - YOLOv8模型加载成功
+2025-06-15 18:13:00,593 - __main__ - INFO - 核心组件初始化成功
+2025-06-15 18:13:00,598 - root - INFO - 用户数据库初始化成功
+2025-06-15 18:13:00,599 - root - INFO - 车位数据库初始化成功
+2025-06-15 18:13:01,375 - urllib3.connectionpool - DEBUG - https://www.google-analytics.com:443 "POST /mp/collect?measurement_id=G-X8NCJYTQXM&api_secret=QLQrATrNSwGRFRLE-cbHJw HTTP/1.1" 204 0
+2025-06-15 18:13:06,440 - __main__ - INFO - 启动 Eventlet WSGI 服务器
+2025-06-15 18:13:20,587 - root - INFO - 摄像头 0 资源已释放
+2025-06-15 18:13:20,589 - __main__ - ERROR - 摄像头 0 无法获取有效帧，可能是设备断开连接

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能停车系统</title>
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box" id="loginBox">
+            <div class="auth-header">
+                <h2>智能停车系统</h2>
+                <p>欢迎回来</p>
+            </div>
+            <form id="loginForm" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="loginUsername" required>
+                    <label for="loginUsername">用户名</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword">密码</label>
+                </div>
+                <button type="submit" class="auth-button">登录</button>
+                <p class="auth-switch">还没有账号？<a href="#" id="showRegister">立即注册</a></p>
+            </form>
+        </div>
+
+        <div class="auth-box hidden" id="registerBox">
+            <div class="auth-header">
+                <h2>创建账号</h2>
+                <p>加入智能停车系统</p>
+            </div>
+            <form id="registerForm" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="registerUsername" required>
+                    <label for="registerUsername">用户名</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="registerPassword" required>
+                    <label for="registerPassword">密码</label>
+                </div>
+                <button type="submit" class="auth-button">注册</button>
+                <p class="auth-switch">已有账号？<a href="#" id="showLogin">返回登录</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainPanel" class="main-panel hidden">
+        <!-- 导航栏 -->
+        <nav class="main-nav">
+            <h1>智能停车系统</h1>
+            <button id="logoutButton" class="nav-button">退出登录</button>
+        </nav>
+        
+        <!-- 主内容区域 -->
+        <div class="content-container">
+            <!-- 左侧视频区域 -->
+            <div id="videoPanel" class="video-panel">
+                <h2 class="panel-title">视频主画面</h2>
+                <div id="videoContainer" class="video-container">
+                    <div class="parking-spot-controls">
+                        <button id="cancelSpotBtn" onclick="cancelAddingSpot()" style="display: none;">取消</button>
+                    </div>
+                    <div id="videoWrapper" class="video-wrapper">
+                        <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
+                        <img id="videoStream" alt="视频流">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧信息区域 -->
+            <div class="info-panel">
+                <!-- 时间日期区域 -->
+                <div class="time-date-panel">
+                    <h2 class="panel-title">时间</h2>
+                    <div id="timeDate" class="time-date-content">
+                        <div id="currentTime" class="current-time"></div>
+                        <div id="currentDate" class="current-date"></div>
+                    </div>
+                </div>
+                
+                <!-- 车位信息区域 -->
+                <div class="parking-info-panel">
+                    <h2 class="panel-title">车位</h2>
+                    <div id="parkingInfo" class="parking-info-content">
+                        <div class="parking-stat-item">
+                            <div class="stat-label">总车位:</div>
+                            <div id="totalSpots" class="stat-value">0</div>
+                        </div>
+                        <div class="parking-stat-item">
+                            <div class="stat-label">已占用:</div>
+                            <div id="occupiedSpots" class="stat-value occupied">0</div>
+                        </div>
+                        <div class="parking-stat-item">
+                            <div class="stat-label">空闲:</div>
+                            <div id="availableSpots" class="stat-value available">0</div>
+                        </div>
+                        <div class="parking-actions">
+                            <button id="addParkingBtn" class="action-btn add-btn">添加车位</button>
+                            <button id="clearParkingBtn" class="action-btn clear-btn">清除所有车位</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/main.js"></script>
+</body>
+</html>
