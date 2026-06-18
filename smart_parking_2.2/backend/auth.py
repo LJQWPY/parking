@@ -1,10 +1,10 @@
-# auth.py
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import create_access_token
 import logging
 import bcrypt
 import sqlite3
-from database import get_users_db_connection, init_users_db # 修改导入
+import cv2
+from database import get_users_db_connection, init_users_db
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -21,7 +21,7 @@ def register():
     conn = None
     try:
         hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        conn = get_users_db_connection() # 修改函数调用
+        conn = get_users_db_connection()
         c = conn.cursor()
         c.execute("INSERT INTO users (username, password) VALUES (?,?)", (username, hashed_pw))
         conn.commit()
@@ -48,16 +48,14 @@ def login():
 
     conn = None
     try:
-        conn = get_users_db_connection() # 修改函数调用
+        conn = get_users_db_connection()
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE username =?", (username,))
         user = c.fetchone()
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
-            # 获取camera_manager实例
             camera_manager = current_app.config['camera_manager']
             
-            # 重新初始化已释放的摄像头
             for cam_id in camera_manager.closed_cameras.copy():
                 if camera_manager.test_camera(cam_id):
                     cap = cv2.VideoCapture(cam_id, camera_manager.backend)
@@ -75,6 +73,3 @@ def login():
     finally:
         if conn:
             conn.close()
-# 在文件开头添加
-import cv2
-from flask import current_app

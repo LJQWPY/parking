@@ -57,10 +57,9 @@ class CameraManager:
                     cap.set(cv2.CAP_PROP_FPS, self.FRAME_RATE)
                     self.cameras[cam_id] = cap
             if not self.cameras:
-                raise RuntimeError("未检测到可用摄像头")
+                logging.warning("未检测到可用摄像头，应用将在无摄像头模式下运行")
         except Exception as e:
             logging.error(f"摄像头初始化失败: {str(e)}", exc_info=True)
-            raise
 
     def test_camera(self, cam_id):
         try:
