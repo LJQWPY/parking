@@ -23,22 +23,31 @@ export interface LoginResponse {
 export interface Camera {
   id: number
   name: string
-  location: string
-  status: 'online' | 'offline' | 'error'
+  location?: string
+  status?: string
   streamUrl?: string
   lastHeartbeat?: string
+  last_updated?: string
+  ip_address?: string
+  zone_id?: number
+  created_at?: string
 }
 
 // 告警类型
 export interface Alert {
   id: number
-  cameraId: number
-  cameraName: string
-  type: 'fire' | 'smoke' | 'intrusion' | 'temperature' | 'humidity'
-  level: 'low' | 'medium' | 'high' | 'critical'
-  message: string
-  status: 'pending' | 'processing' | 'resolved'
-  createdAt: string
+  camera_id: number
+  zone_id?: number
+  alert_type: string
+  level: string
+  description?: string
+  message?: string
+  image_url?: string
+  video_url?: string
+  is_handled: boolean
+  handled_by?: string
+  handled_at?: string
+  created_at: string
   resolvedAt?: string
 }
 
@@ -61,4 +70,11 @@ export interface PaginatedResponse<T> {
   total: number
   page: number
   pageSize: number
+}
+
+// API响应包装类型
+export interface WrappedResponse<T> {
+  code: number
+  message: string
+  data: T
 }

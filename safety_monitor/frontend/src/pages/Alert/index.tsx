@@ -1,47 +1,115 @@
-import { useState } from 'react'
-import { Table, Tag, Button, Space, Select, Card } from 'antd'
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { useState, useEffect } from 'react'
+import { Table, Tag, Button, Space, Card, Badge, Statistic, Row, Col } from 'antd'
+import { WarningOutlined, CheckCircleOutlined, ClockCircleOutlined, WarningFilled } from '@ant-design/icons'
 import type { Alert } from '../../api/types'
 
-const { Option } = Select
-
 const AlertPage = () => {
-  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
-  
-  const levelColorMap: Record<string, string> = {
-    low: 'blue',
-    medium: 'orange',
-    high: 'red',
-    critical: 'red'
+  const [loading, setLoading] = useState(false)
+  const [alerts, setAlerts] = useState<Alert[]>([])
+  const [stats, setStats] = useState({ total: 0, high: 0, medium: 0, low: 0, unhandled: 0 })
+
+  useEffect(() => {
+    loadAlerts()
+    loadStats()
+  }, [])
+
+  const loadAlerts = async () => {
+    setLoading(true)
+    try {
+      const mockAlerts: Alert[] = [
+        {
+          id: 1,
+          camera_id: 1,
+          alert_type: 'no_helmet',
+          level: 'medium',
+          description: '检测到未佩戴安全帽 (置信度: 0.85)',
+          is_handled: false,
+          created_at: '2024-01-15 10:32:15'
+        },
+        {
+          id: 2,
+          camera_id: 2,
+          alert_type: 'intrusion',
+          level: 'high',
+          description: '检测到危险区域入侵 - 高压区 (置信度: 0.92)',
+          is_handled: false,
+          created_at: '2024-01-15 10:30:45'
+        },
+        {
+          id: 3,
+          camera_id: 1,
+          alert_type: 'fire',
+          level: 'high',
+          description: '检测到火焰 (置信度: 0.88)',
+          is_handled: true,
+          handled_by: 'admin',
+          handled_at: '2024-01-15 10:25:00',
+          created_at: '2024-01-15 10:20:00'
+        },
+        {
+          id: 4,
+          camera_id: 3,
+          alert_type: 'person',
+          level: 'low',
+          description: '检测到人员 (置信度: 0.75)',
+          is_handled: true,
+          handled_by: 'admin',
+          handled_at: '2024-01-15 10:15:00',
+          created_at: '2024-01-15 10:10:00'
+        },
+        {
+          id: 5,
+          camera_id: 1,
+          alert_type: 'smoke',
+          level: 'high',
+          description: '检测到烟雾 (置信度: 0.90)',
+          is_handled: false,
+          created_at: '2024-01-15 10:18:30'
+        }
+      ]
+      setAlerts(mockAlerts)
+    } catch (error) {
+      console.error('加载告警失败:', error)
+    } finally {
+      setLoading(false)
+    }
   }
-  
-  const levelTextMap: Record<string, string> = {
-    low: '低',
-    medium: '中',
-    high: '高',
-    critical: '严重'
+
+  const loadStats = async () => {
+    try {
+      setStats({
+        total: 5,
+        high: 3,
+        medium: 1,
+        low: 1,
+        unhandled: 3
+      })
+    } catch (error) {
+      console.error('加载统计失败:', error)
+    }
   }
-  
-  const statusColorMap: Record<string, string> = {
-    pending: 'orange',
-    processing: 'blue',
-    resolved: 'green'
+
+  const handleAlert = (alertId: number) => {
+    setAlerts(prev => prev.map(alert => 
+      alert.id === alertId ? { ...alert, is_handled: true, handled_by: 'admin', handled_at: new Date().toLocaleString() } : alert
+    ))
+    setStats(prev => ({ ...prev, unhandled: prev.unhandled - 1 }))
   }
-  
-  const statusTextMap: Record<string, string> = {
-    pending: '待处理',
-    processing: '处理中',
-    resolved: '已解决'
+
+  const levelConfig: Record<string, { color: string; text: string; icon: React.ReactNode }> = {
+    high: { color: 'red', text: '严重', icon: <WarningFilled /> },
+    medium: { color: 'orange', text: '警告', icon: <WarningOutlined /> },
+    low: { color: 'yellow', text: '提示', icon: <ClockCircleOutlined /> }
   }
-  
-  const typeTextMap: Record<string, string> = {
-    fire: '火灾',
-    smoke: '烟雾',
-    intrusion: '入侵',
-    temperature: '温度异常',
-    humidity: '湿度异常'
+
+  const typeConfig: Record<string, string> = {
+    fire: '火焰检测',
+    smoke: '烟雾检测',
+    no_helmet: '未佩戴安全帽',
+    intrusion: '区域入侵',
+    person: '人员检测'
   }
-  
+
   const columns = [
     {
       title: 'ID',
@@ -50,101 +118,109 @@ const AlertPage = () => {
       width: 80
     },
     {
-      title: '摄像头',
-      dataIndex: 'cameraName',
-      key: 'cameraName'
-    },
-    {
       title: '告警类型',
-      dataIndex: 'type',
-      key: 'type',
-      render: (type: string) => typeTextMap[type] || type
-    },
-    {
-      title: '告警级别',
-      dataIndex: 'level',
-      key: 'level',
-      render: (level: string) => (
-        <Tag color={levelColorMap[level]}>{levelTextMap[level]}</Tag>
+      dataIndex: 'alert_type',
+      key: 'alert_type',
+      render: (type: string) => (
+        <Tag color="blue">{typeConfig[type] || type}</Tag>
       )
     },
     {
-      title: '消息',
-      dataIndex: 'message',
-      key: 'message'
+      title: '级别',
+      dataIndex: 'level',
+      key: 'level',
+      render: (level: string) => {
+        const config = levelConfig[level]
+        return config ? <Tag color={config.color}>{config.icon} {config.text}</Tag> : <Tag>{level}</Tag>
+      }
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description'
+    },
+    {
+      title: '摄像头',
+      dataIndex: 'camera_id',
+      key: 'camera_id',
+      render: (id: number) => `摄像头 ${id}`
     },
     {
       title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => (
-        <Tag color={statusColorMap[status]}>{statusTextMap[status]}</Tag>
+      dataIndex: 'is_handled',
+      key: 'is_handled',
+      render: (handled: boolean) => (
+        handled 
+          ? <Tag color="green"><CheckCircleOutlined /> 已处理</Tag>
+          : <Tag color="red"><WarningOutlined /> 未处理</Tag>
       )
     },
     {
-      title: '时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt'
+      title: '创建时间',
+      dataIndex: 'created_at',
+      key: 'created_at'
     },
     {
       title: '操作',
       key: 'action',
       render: (_: any, record: Alert) => (
         <Space>
-          {record.status === 'pending' && (
+          {!record.is_handled && (
             <Button 
-              type="link" 
-              icon={<CheckOutlined />}
+              type="primary" 
               size="small"
+              onClick={() => handleAlert(record.id)}
             >
               处理
             </Button>
           )}
-          {record.status !== 'resolved' && (
-            <Button 
-              type="link" 
-              icon={<CloseOutlined />}
-              size="small"
-            >
-              关闭
-            </Button>
+          {record.handled_by && (
+            <span style={{ color: '#999', fontSize: 12 }}>
+              处理人: {record.handled_by}
+            </span>
           )}
         </Space>
       )
     }
   ]
-  
-  // 模拟数据
-  const mockData: Alert[] = [
-    { id: 1, cameraId: 1, cameraName: '1号车间摄像头', type: 'fire', level: 'critical', message: '检测到明火', status: 'pending', createdAt: '2024-01-15 10:30:00' },
-    { id: 2, cameraId: 2, cameraName: '2号车间摄像头', type: 'smoke', level: 'high', message: '检测到烟雾', status: 'processing', createdAt: '2024-01-15 10:25:00' },
-    { id: 3, cameraId: 3, cameraName: '仓库摄像头', type: 'intrusion', level: 'medium', message: '检测到人员入侵', status: 'resolved', createdAt: '2024-01-15 09:00:00', resolvedAt: '2024-01-15 09:30:00' },
-    { id: 4, cameraId: 4, cameraName: '大门摄像头', type: 'temperature', level: 'low', message: '温度偏高', status: 'pending', createdAt: '2024-01-15 08:00:00' },
-  ]
-  
+
   return (
     <div>
       <h1 style={{ marginBottom: 24 }}>告警管理</h1>
+      
+      <Row gutter={16} style={{ marginBottom: 24 }}>
+        <Col span={6}>
+          <Card>
+            <Statistic title="总告警数" value={stats.total} prefix={<WarningOutlined />} />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic title="严重告警" value={stats.high} prefix={<WarningFilled />} valueStyle={{ color: '#f5222d' }} />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic title="警告告警" value={stats.medium} prefix={<WarningOutlined />} valueStyle={{ color: '#fa8c16' }} />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic title="未处理" value={stats.unhandled} prefix={<ClockCircleOutlined />} valueStyle={{ color: '#faad14' }} />
+            {stats.unhandled > 0 && (
+              <Badge dot color="red" style={{ position: 'absolute', top: 10, right: 10 }} />
+            )}
+          </Card>
+        </Col>
+      </Row>
+
       <Card>
-        <div style={{ marginBottom: 16 }}>
-          <Space>
-            <span>状态筛选:</span>
-            <Select 
-              placeholder="选择状态" 
-              allowClear
-              style={{ width: 150 }}
-              onChange={(value) => setStatusFilter(value)}
-            >
-              <Option value="pending">待处理</Option>
-              <Option value="processing">处理中</Option>
-              <Option value="resolved">已解决</Option>
-            </Select>
-          </Space>
-        </div>
         <Table
           columns={columns}
-          dataSource={mockData.filter(item => !statusFilter || item.status === statusFilter)}
+          dataSource={alerts}
           rowKey="id"
+          loading={loading}
+          pagination={{ pageSize: 10 }}
         />
       </Card>
     </div>

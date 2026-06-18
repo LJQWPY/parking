@@ -91,7 +91,7 @@ const Monitor = () => {
         <Table
           columns={columns}
           dataSource={mockData.filter(item => 
-            item.name.includes(searchText) || item.location.includes(searchText)
+            item.name.includes(searchText) || (item.location && item.location.includes(searchText))
           )}
           rowKey="id"
           loading={loading}

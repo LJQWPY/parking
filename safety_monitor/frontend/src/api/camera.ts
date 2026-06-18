@@ -28,10 +28,19 @@ export const cameraApi = {
   
   stopStream: (id: number) => {
     return request.post(`/stream/${id}/stop`)
+  },
+  
+  toggleDetection: (id: number, enabled: boolean) => {
+    return request.post(`/stream/${id}/detection/toggle`, null, { params: { enabled } })
+  },
+  
+  getDetectionStatus: () => {
+    return request.get('/stream/detection/status')
   }
 }
 
-export const getStreamUrl = (cameraId: number): string => {
+export const getStreamUrl = (cameraId: number, detection: boolean = false): string => {
   const token = localStorage.getItem('token')
-  return `/api/v1/stream/${cameraId}?token=${token}`
+  const detectionParam = detection ? '&detection=true' : ''
+  return `/api/v1/stream/${cameraId}?token=${token}${detectionParam}`
 }
