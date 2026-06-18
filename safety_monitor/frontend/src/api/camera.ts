@@ -22,7 +22,16 @@ export const cameraApi = {
     return request.delete(`/cameras/${id}`)
   },
   
-  getStreamUrl: (id: number) => {
-    return request.get<string>(`/cameras/${id}/stream`)
+  startStream: (id: number) => {
+    return request.post(`/stream/${id}/start`)
+  },
+  
+  stopStream: (id: number) => {
+    return request.post(`/stream/${id}/stop`)
   }
+}
+
+export const getStreamUrl = (cameraId: number): string => {
+  const token = localStorage.getItem('token')
+  return `/api/v1/stream/${cameraId}?token=${token}`
 }
