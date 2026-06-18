@@ -10,7 +10,9 @@ from shapely.geometry import Polygon, Point
 import time
 
 class ParkingSpotDetector:
-    def __init__(self, model_path=r'E:\bc\python\smart_parking_2.2\models\yolov8n.pt', camera_id=None):
+    def __init__(self, model_path=None, camera_id=None):
+        if model_path is None:
+            model_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'yolov8n.pt')
         self.current_camera_id = camera_id
         self.last_update_time = {}
         self.status_stability_threshold = 3  # 需要连续3次检测结果一致才更新状态
