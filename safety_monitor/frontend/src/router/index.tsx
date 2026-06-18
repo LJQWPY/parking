@@ -6,6 +6,7 @@ import Dashboard from '../pages/Dashboard'
 import Monitor from '../pages/Monitor'
 import MonitorDetail from '../pages/Monitor/[id]'
 import Alert from '../pages/Alert'
+import Playback from '../pages/Playback'
 import Settings from '../pages/Settings'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -35,6 +36,7 @@ const AppRoutes = () => {
         <Route path="monitor" element={<Monitor />} />
         <Route path="monitor/:id" element={<MonitorDetail />} />
         <Route path="alert" element={<Alert />} />
+        <Route path="playback" element={<Playback />} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

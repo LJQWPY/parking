@@ -18,3 +18,4 @@ class Camera(Base):
 
     zone = relationship("Zone", back_populates="cameras")
     alerts = relationship("Alert", back_populates="camera")
+    recordings = relationship("Recording", back_populates="camera")

@@ -4,6 +4,7 @@ import {
   DashboardOutlined,
   VideoCameraOutlined,
   AlertOutlined,
+  PlayCircleOutlined,
   SettingOutlined
 } from '@ant-design/icons'
 import { useAppStore } from '../../stores/appStore'
@@ -25,6 +26,11 @@ const menuItems = [
     key: '/alert',
     icon: <AlertOutlined />,
     label: '告警管理'
+  },
+  {
+    key: '/playback',
+    icon: <PlayCircleOutlined />,
+    label: '录像回放'
   },
   {
     key: '/settings',
